@@ -1,0 +1,4 @@
+image: '55aa4df7-1996-4507-955f-30f72d970836'
+flavor: 102
+agent_user: 'ubuntu'
+postgres_port: 5432

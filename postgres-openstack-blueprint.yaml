@@ -35,6 +35,15 @@ node_templates:
 
   postgres_host:
     type: monitoredhosts.openstack.nodes.MonitoredServer
+
+    ###########################################################
+    # Setting the nodejs_host initial number of instances to 2.
+    # The default values for instances.deploy is 1.
+    ###########################################################
+
+    instances:
+      deploy: 3
+
     relationships:
       - target: postgres_security_group
         type: cloudify.openstack.server_connected_to_security_group
