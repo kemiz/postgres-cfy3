@@ -11,7 +11,7 @@ imports:
   - http://www.getcloudify.org/spec/diamond-plugin/1.2m8/plugin.yaml
   - https://raw.githubusercontent.com/kemiz/monitored-server-cfy3/master/types/monitored-server-types.yaml
   - types/postgres.yaml
-  
+
 inputs:
 
   image:
@@ -26,44 +26,26 @@ inputs:
     description: >
       User for connecting to agent VM's
 
+  postgres_port:
+    default: 5432
+    description: >
+      User for connecting to agent VM's
+
 node_templates:
 
   postgres_host:
     type: monitoredhosts.openstack.nodes.MonitoredServer
     relationships:
-
-      ###########################################################
-      # Attaching the mongo security group to the mongo host
-      ###########################################################
-
       - target: postgres_security_group
         type: cloudify.openstack.server_connected_to_security_group
 
   postgres:
     type: postgres.nodes.PostgresSQL
     properties:
-      port: 27017
-    interfaces:
-      cloudify.interfaces.monitoring:
-          start:
-            implementation: diamond.diamond_agent.tasks.add_collectors
-            inputs:
-              collectors_config:
-                MongoDBCollector:
-                  config:
-                    hosts: "localhost:27017"
+      port: { get_input: postgres_port }
     relationships:
       - type: cloudify.relationships.contained_in
         target: postgres_host
-
-  ###########################################################
-  # A security group to enable access to the mongo host
-  # using the port of the mongo node.
-  #
-  # We need this so that the nodecellar application can
-  # comminicate with MongoDB, since they are running on
-  # different hosts.
-  ###########################################################
 
   postgres_security_group:
     type: cloudify.openstack.nodes.SecurityGroup
@@ -73,5 +55,3 @@ node_templates:
       rules:
         - remote_ip_prefix: 0.0.0.0/0
           port: { get_property: [ postgres, port ] }
-        - remote_ip_prefix: 0.0.0.0/0
-          port: 28017

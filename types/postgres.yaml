@@ -8,14 +8,6 @@
 
 node_types:
 
-  ###########################################################
-  # Mongo Database.
-  #
-  # Used the data backend for the nodecellar application.
-  # configurable properties:
-  #   - port
-  ###########################################################
-
   postgres.nodes.PostgresSQL:
     derived_from: cloudify.nodes.DBMS
     properties:
@@ -39,24 +31,8 @@ node_types:
           inputs:
             script_path:
               default: https://raw.githubusercontent.com/kemiz/postgres-cfy3/3.2m8/scripts/stop-postgres.sh
-              
-################################################################
-# Blueprint relationships.
-#
-# specific new relationships for the nodecellar app.
-# these relationships are mapped to scripts that are resposible
-# for the relationship operation.
-################################################################
 
 relationships:
-
-  ###########################################################
-  # This relationship is responsible for setting the mongo
-  # host ip on the source node as a runtime property.
-  #
-  # This will enable the source node to locate the mongo
-  # database.
-  ###########################################################
 
   connected_to_postgres:
     derived_from: cloudify.relationships.connected_to
